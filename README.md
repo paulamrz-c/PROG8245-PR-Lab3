@@ -18,9 +18,6 @@ The notebook `PROG8245_Lab2 - Data Engineering & EDA.ipynb`  implementing:
 - Business-relevant visualizations
 
 
-### - The datasets
-All sources used in this lab.
-
 ## Quick Start
 
 ```bash
@@ -34,4 +31,4 @@ jupyter notebook
 ```
 ## Data-sources
 
-https://www.kaggle.com/datasets/talhabu/us-regional-sales-data?select=US_Regional_Sales_Data.csv
+Generated Synthetically 
