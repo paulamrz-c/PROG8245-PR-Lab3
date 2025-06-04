@@ -7516,7 +7516,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="PROG8245_Lab2---Data-Collection-&amp;-Pre-Processing">PROG8245_Lab2 - Data Collection &amp; Pre-Processing<a class="anchor-link" href="#PROG8245_Lab2---Data-Collection-&amp;-Pre-Processing">¶</a></h1><p>In this notebook, I connect to a cloud-based SQL database and perform a full data engineering workflow: collecting, cleaning, transforming, scaling, exploring (EDA), and visualizing data using Python and Pandas.</p>
+<h1 id="PROG8245_Lab3---Data-Engineering-&amp;-EDA">PROG8245_Lab3 - Data Engineering &amp; EDA<a class="anchor-link" href="#PROG8245_Lab3---Data-Engineering-&amp;-EDA">¶</a></h1><p>In this notebook, I connect to a cloud-based SQL database and perform a full data engineering workflow: collecting, cleaning, transforming, scaling, exploring (EDA), and visualizing data using Python and Pandas.</p>
 </div>
 </div>
 </div>
@@ -7525,7 +7525,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
@@ -7581,7 +7581,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">fake</span> <span class="o">=</span> <span class="n">Faker</span><span class="p">()</span>
@@ -7589,12 +7589,22 @@ a.anchor-link {
  <span class="s1">'Software Engineer'</span><span class="p">,</span> <span class="s1">'Data Analyst'</span><span class="p">,</span> <span class="s1">'DevOps Engineer'</span><span class="p">,</span> <span class="s1">'ML Engineer'</span><span class="p">,</span> <span class="s1">'QA Engineer'</span><span class="p">,</span>
  <span class="s1">'Backend Developer'</span><span class="p">,</span> <span class="s1">'Frontend Developer'</span><span class="p">,</span> <span class="s1">'Cloud Architect'</span><span class="p">,</span> <span class="s1">'SysAdmin'</span><span class="p">,</span> <span class="s1">'Data Scientist'</span>
 <span class="p">]</span>
+<span class="n">statements</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># Generate SQL statements for inserting employee data</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
 	<span class="n">name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"'"</span><span class="p">,</span> <span class="s2">"''"</span><span class="p">)</span> <span class="c1"># Escape single quotes</span>
 	<span class="n">position</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
 	<span class="n">start_date</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">date_between</span><span class="p">(</span><span class="n">start_date</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="n">end_date</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">())</span>
 	<span class="n">salary</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">200000</span><span class="p">)</span>
-	<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"INSERT INTO employees (name, position, start_date, salary) VALUES ('</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">', </span><span class="si">{</span><span class="n">salary</span><span class="si">}</span><span class="s2">);"</span><span class="p">)</span>
+	<span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">"INSERT INTO employees (name, position, start_date, salary) "</span>
+        <span class="sa">f</span><span class="s2">"VALUES ('</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">', </span><span class="si">{</span><span class="n">salary</span><span class="si">}</span><span class="s2">);"</span>
+    <span class="p">)</span>
+	<span class="n">statements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+
+<span class="c1">#print the SQL statements (for debugging purposes just 5 statements)</span>
+<span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">statements</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7607,56 +7617,11 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>INSERT INTO employees (name, position, start_date, salary) VALUES ('Joseph Rodriguez', 'Data Scientist', '2019-10-09', 79904);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Crystal Brown', 'DevOps Engineer', '2023-10-04', 150160);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Sean Hudson', 'SysAdmin', '2023-05-10', 70522);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Cheyenne Kim', 'DevOps Engineer', '2017-08-09', 82449);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Jose Stevens', 'SysAdmin', '2022-02-16', 151083);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Beth Sanford', 'ML Engineer', '2020-01-17', 197177);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Todd Perez', 'QA Engineer', '2022-10-19', 146794);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Frank Bailey', 'QA Engineer', '2022-04-13', 162474);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Mr. Mark Gonzales', 'Backend Developer', '2017-09-22', 81552);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Lawrence Mcmahon', 'DevOps Engineer', '2016-05-25', 62254);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Kimberly Abbott', 'SysAdmin', '2023-11-13', 133752);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Phillip Anderson', 'Data Analyst', '2023-03-28', 195634);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Caitlin Lewis', 'Data Analyst', '2017-02-15', 187878);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Kathryn Haynes MD', 'Frontend Developer', '2023-07-23', 120766);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Laura Ward', 'DevOps Engineer', '2022-05-26', 77784);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Robert Gomez', 'Backend Developer', '2023-04-03', 83353);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Travis Carter', 'Frontend Developer', '2020-07-29', 181259);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Amanda Hunter', 'SysAdmin', '2020-01-30', 146325);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Jonathan Roth', 'Frontend Developer', '2020-09-01', 174916);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Mercedes Henderson', 'ML Engineer', '2022-03-19', 93655);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Samantha Allen', 'Frontend Developer', '2016-08-21', 66423);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Carlos Diaz', 'Data Analyst', '2023-04-23', 73468);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Steve Garcia', 'Frontend Developer', '2023-03-25', 98997);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Christina Hooper', 'SysAdmin', '2015-05-08', 160628);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Diana Diaz', 'Cloud Architect', '2017-07-29', 78298);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Samuel Salazar', 'Cloud Architect', '2016-02-27', 168590);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Jeremy Warner', 'DevOps Engineer', '2015-12-21', 131726);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Julie Perry', 'DevOps Engineer', '2015-03-05', 171290);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Amanda Nelson', 'QA Engineer', '2022-06-14', 107744);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Mr. Gregory Mejia', 'Data Scientist', '2019-06-18', 83791);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Christy Wood', 'DevOps Engineer', '2023-09-12', 72955);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Diane Miller', 'DevOps Engineer', '2023-10-15', 130301);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Dan Hernandez', 'DevOps Engineer', '2020-10-20', 66189);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Jacob Rivera', 'Cloud Architect', '2015-08-26', 146977);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Casey Sullivan', 'Cloud Architect', '2015-08-24', 101048);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Christian Valentine', 'Backend Developer', '2022-11-22', 124916);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Lisa Shelton', 'Frontend Developer', '2021-07-19', 188994);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Rhonda Brown', 'Data Scientist', '2015-10-01', 109005);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Patricia Thomas', 'Data Analyst', '2023-12-01', 194911);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Anthony Wallace', 'Software Engineer', '2021-09-03', 128363);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Karen Ramos', 'DevOps Engineer', '2015-04-11', 131418);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Ariel Sanchez', 'Cloud Architect', '2019-03-18', 65152);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Larry Carson', 'QA Engineer', '2018-07-11', 122931);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Robert Webb', 'Backend Developer', '2023-07-23', 61688);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Erica Wells', 'Frontend Developer', '2021-10-05', 109633);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Karina Patterson', 'Data Scientist', '2015-05-05', 163233);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Susan Martinez', 'Data Scientist', '2018-08-25', 77101);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Sarah Martin', 'Backend Developer', '2023-03-26', 196807);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('Brittany Evans DDS', 'Data Scientist', '2020-05-04', 68757);
-INSERT INTO employees (name, position, start_date, salary) VALUES ('James Graves', 'Frontend Developer', '2015-12-03', 143696);
+<pre>INSERT INTO employees (name, position, start_date, salary) VALUES ('Richard Scott', 'ML Engineer', '2019-08-19', 134045);
+INSERT INTO employees (name, position, start_date, salary) VALUES ('Adrian Peters', 'Cloud Architect', '2021-01-21', 126972);
+INSERT INTO employees (name, position, start_date, salary) VALUES ('Natalie Beck', 'DevOps Engineer', '2018-06-11', 118878);
+INSERT INTO employees (name, position, start_date, salary) VALUES ('Christopher Turner', 'SysAdmin', '2019-06-02', 104630);
+INSERT INTO employees (name, position, start_date, salary) VALUES ('Tiffany Koch', 'Backend Developer', '2020-06-16', 103728);
 </pre>
 </div>
 </div>
@@ -7701,10 +7666,12 @@ INSERT INTO employees (name, position, start_date, salary) VALUES ('James Graves
 <span class="c1"># Querying the database to retrieve the data using pandas</span>
 <span class="n">employees_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">"SELECT * FROM employees;"</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
 
-<span class="c1"># Show the DataFrame</span>
-<span class="n">employees_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
 
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Show the DataFrame</span>
+<span class="n">employees_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -7717,9 +7684,83 @@ INSERT INTO employees (name, position, start_date, salary) VALUES ('James Graves
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>C:\Users\paula\AppData\Local\Temp\ipykernel_24720\2455955167.py:6: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+<pre>C:\Users\paula\AppData\Local\Temp\ipykernel_7712\4040683511.py:6: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   employees_df = pd.read_sql_query("SELECT * FROM employees;", conn)
 </pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>employee_id</th>
+<th>name</th>
+<th>position</th>
+<th>start_date</th>
+<th>salary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>1</td>
+<td>Krista Gonzalez</td>
+<td>Data Scientist</td>
+<td>2017-05-07</td>
+<td>88450</td>
+</tr>
+<tr>
+<th>1</th>
+<td>2</td>
+<td>Sierra Weeks</td>
+<td>DevOps Engineer</td>
+<td>2024-05-16</td>
+<td>163491</td>
+</tr>
+<tr>
+<th>2</th>
+<td>3</td>
+<td>Megan Santiago</td>
+<td>SysAdmin</td>
+<td>2022-03-25</td>
+<td>101962</td>
+</tr>
+<tr>
+<th>3</th>
+<td>4</td>
+<td>Tracey Gordon</td>
+<td>SysAdmin</td>
+<td>2016-10-31</td>
+<td>188298</td>
+</tr>
+<tr>
+<th>4</th>
+<td>5</td>
+<td>Cole Lopez</td>
+<td>SysAdmin</td>
+<td>2019-03-21</td>
+<td>178755</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -8296,8 +8337,17 @@ None
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="6.-Advance-Visualization">6. Advance Visualization<a class="anchor-link" href="#6.-Advance-Visualization">¶</a></h2><p>Creating more complex dataset by merging or joining additional information.</p>
-<h4 id="Creating-datasets">Creating datasets<a class="anchor-link" href="#Creating-datasets">¶</a></h4><p>Creating the tables on Neon Console</p>
-<p><code>DDLs in PostgreSQL:</code></p>
+<h4 id="Creating-the-tables-on-Neon-Console">Creating the tables on Neon Console<a class="anchor-link" href="#Creating-the-tables-on-Neon-Console">¶</a></h4><p><code>DDLs in PostgreSQL:</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f2e149be">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><img alt="DDL Project" src="img%5CDDL_Projects.png"/></p>
 </div>
 </div>
@@ -8332,11 +8382,10 @@ Each project was given a random budget, and assignment dates were generated usin
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Creating Cursor and inserting data into the database</span>
-
 <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">conn_str</span><span class="p">)</span>
 
 <span class="c1">#list of projects</span>
@@ -8419,9 +8468,9 @@ Each project was given a random budget, and assignment dates were generated usin
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:71: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+<pre>C:\Users\paula\AppData\Local\Temp\ipykernel_7712\1444911768.py:68: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   projects_df = pd.read_sql_query("SELECT * FROM projects;", conn)
-C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+C:\Users\paula\AppData\Local\Temp\ipykernel_7712\1444911768.py:69: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
   project_assignment_df = pd.read_sql_query("SELECT * FROM project_assignment;", conn)
 </pre>
 </div>
@@ -8444,7 +8493,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Querying the projects table to verify insertion</span>
@@ -8459,7 +8508,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8527,7 +8576,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Querying the project_assignment table to verify insertion</span>
@@ -8542,7 +8591,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8627,7 +8676,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># joining employees and projects df to create a merged DataFrame</span>
@@ -8635,7 +8684,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
       <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'employee_id'</span><span class="p">)</span>
       <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">projects_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'project_id'</span><span class="p">))</span>
 
-<span class="n">df_merge</span>
+<span class="n">df_merge</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -8646,7 +8695,7 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8674,10 +8723,6 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <th>position</th>
 <th>start_date</th>
 <th>salary</th>
-<th>year_hired</th>
-<th>years_service</th>
-<th>salary_thousand</th>
-<th>salary_scaled</th>
 <th>project_name</th>
 <th>budget</th>
 </tr>
@@ -8693,10 +8738,6 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <td>Data Scientist</td>
 <td>2017-05-07</td>
 <td>88450</td>
-<td>2017</td>
-<td>8</td>
-<td>88.450</td>
-<td>0.197627</td>
 <td>Automation Wave</td>
 <td>592387.0</td>
 </tr>
@@ -8710,10 +8751,6 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <td>DevOps Engineer</td>
 <td>2024-05-16</td>
 <td>163491</td>
-<td>2024</td>
-<td>1</td>
-<td>163.491</td>
-<td>0.772526</td>
 <td>Cloud Migration 2025</td>
 <td>770182.0</td>
 </tr>
@@ -8727,10 +8764,6 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <td>DevOps Engineer</td>
 <td>2024-05-16</td>
 <td>163491</td>
-<td>2024</td>
-<td>1</td>
-<td>163.491</td>
-<td>0.772526</td>
 <td>Analytics Accelerator</td>
 <td>894729.0</td>
 </tr>
@@ -8744,10 +8777,6 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <td>DevOps Engineer</td>
 <td>2024-05-16</td>
 <td>163491</td>
-<td>2024</td>
-<td>1</td>
-<td>163.491</td>
-<td>0.772526</td>
 <td>Digital Core</td>
 <td>1067051.0</td>
 </tr>
@@ -8761,118 +8790,11 @@ C:\Users\paula\AppData\Local\Temp\ipykernel_24720\4249739703.py:72: UserWarning:
 <td>SysAdmin</td>
 <td>2022-03-25</td>
 <td>101962</td>
-<td>2022</td>
-<td>3</td>
-<td>101.962</td>
-<td>0.301144</td>
 <td>Digital Core</td>
 <td>1067051.0</td>
-</tr>
-<tr>
-<th>...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>104</th>
-<td>105</td>
-<td>49</td>
-<td>1</td>
-<td>2022-01-12</td>
-<td>Peter Wade MD</td>
-<td>Cloud Architect</td>
-<td>2023-04-12</td>
-<td>133497</td>
-<td>2023</td>
-<td>2</td>
-<td>133.497</td>
-<td>0.542738</td>
-<td>Enterprise Modernization</td>
-<td>1229159.0</td>
-</tr>
-<tr>
-<th>105</th>
-<td>106</td>
-<td>49</td>
-<td>9</td>
-<td>2021-08-06</td>
-<td>Peter Wade MD</td>
-<td>Cloud Architect</td>
-<td>2023-04-12</td>
-<td>133497</td>
-<td>2023</td>
-<td>2</td>
-<td>133.497</td>
-<td>0.542738</td>
-<td>Digital Core</td>
-<td>1067051.0</td>
-</tr>
-<tr>
-<th>106</th>
-<td>107</td>
-<td>50</td>
-<td>7</td>
-<td>2021-10-18</td>
-<td>Curtis Parker</td>
-<td>Data Analyst</td>
-<td>2020-10-12</td>
-<td>64007</td>
-<td>2020</td>
-<td>5</td>
-<td>64.007</td>
-<td>0.010366</td>
-<td>Analytics Accelerator</td>
-<td>894729.0</td>
-</tr>
-<tr>
-<th>107</th>
-<td>108</td>
-<td>50</td>
-<td>4</td>
-<td>2022-12-29</td>
-<td>Curtis Parker</td>
-<td>Data Analyst</td>
-<td>2020-10-12</td>
-<td>64007</td>
-<td>2020</td>
-<td>5</td>
-<td>64.007</td>
-<td>0.010366</td>
-<td>Cloud Migration 2025</td>
-<td>770182.0</td>
-</tr>
-<tr>
-<th>108</th>
-<td>109</td>
-<td>50</td>
-<td>2</td>
-<td>2021-11-03</td>
-<td>Curtis Parker</td>
-<td>Data Analyst</td>
-<td>2020-10-12</td>
-<td>64007</td>
-<td>2020</td>
-<td>5</td>
-<td>64.007</td>
-<td>0.010366</td>
-<td>Customer-360</td>
-<td>893658.0</td>
 </tr>
 </tbody>
 </table>
-<p>109 rows × 14 columns</p>
 </div>
 </div>
 </div>

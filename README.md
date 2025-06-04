@@ -17,6 +17,8 @@ The notebook `PROG8245_Lab2 - Data Engineering & EDA.ipynb`  implementing:
 
 - Business-relevant visualizations
 
+### HTML Export (for GitHub Pages)
+You can view the published notebook [here](https://paulamrz-c.github.io/PROG8245-PR-Lab3/PROG8245_Lab3-Data_Engineering_&_EDA.html)
 
 ## Quick Start
 
